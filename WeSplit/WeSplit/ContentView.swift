@@ -2,34 +2,33 @@
 //  ContentView.swift
 //  WeSplit
 //
-//  Created by Uday Pandey on 16/07/2020.
+//  Created by Uday Pandey on 25/07/2020.
 //
 
 import SwiftUI
 
 struct ContentView: View {
-    @State private var checkAmount = ""
-    @State private var numberOfPeople = 2
-    @State private var tipPercentage = 2
+    @State private var amount = ""
+    @State private var peopleIndex = 0
+    @State private var tipIndex = 2
 
-    let tipPercentages = [10, 15, 20, 25, 0]
-
+    let tipPercentages = [0, 5, 10, 15, 20, 25]
     var body: some View {
         NavigationView {
             Form {
                 Section {
-                    TextField("Amount", text: $checkAmount)
+                    TextField("Amount", text: $amount)
                         .keyboardType(.decimalPad)
 
-                    Picker("Number of people", selection: $numberOfPeople) {
-                        ForEach(2 ..< 100) {
-                            Text("\($0) people")
+                    Picker("Number Of People", selection: $peopleIndex) {
+                        ForEach(2..<10) { count in
+                            Text("\(count) people")
                         }
                     }
                 }
 
                 Section(header: Text("How much tip do you want to leave?")) {
-                    Picker("Tip percentage", selection: $tipPercentage) {
+                    Picker("Number Of People", selection: $tipIndex) {
                         ForEach(0 ..< tipPercentages.count) {
                             Text("\(self.tipPercentages[$0])%")
                         }
@@ -38,33 +37,27 @@ struct ContentView: View {
                 }
 
                 Section(header: Text("Total")) {
-                    Text("$\(totalWithTip, specifier: "%.2f")")
-                        .font(.largeTitle)
+                    Text("\(totalAmount, specifier: "%.2f")")
                 }
 
-
-                Section(header: Text("Amount per person")) {
-                    Text("$\(totalPerPerson, specifier: "%.2f")")
+                Section(header: Text("Amount To Pay")) {
+                    Text("\(dividedAmount, specifier: "%.2f")")
                         .font(.largeTitle)
                 }
             }
-            .navigationBarTitle("WeSplit")
-
+            .navigationTitle("WeSplit")
         }
     }
 
-    var totalWithTip: Double {
-        let tipSelection = Double(tipPercentages[tipPercentage])
-        let orderAmount = Double(checkAmount) ?? 0
+    private var totalAmount: Double {
+        let amt = Double(amount) ?? 0.0
+        let tip = Double(tipPercentages[tipIndex])
 
-        let tipValue = orderAmount / 100 * tipSelection
-        let grandTotal = orderAmount + tipValue
-        return grandTotal
+        return amt * ( 100 + tip ) / 100.0
     }
 
-    var totalPerPerson: Double {
-        let peopleCount = Double(numberOfPeople + 2)
-        return totalWithTip / peopleCount
+    private var dividedAmount: Double {
+        totalAmount / Double(peopleIndex + 2)
     }
 }
 

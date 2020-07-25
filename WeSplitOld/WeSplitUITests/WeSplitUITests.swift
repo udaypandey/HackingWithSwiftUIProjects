@@ -2,7 +2,7 @@
 //  WeSplitUITests.swift
 //  WeSplitUITests
 //
-//  Created by Uday Pandey on 25/07/2020.
+//  Created by Uday Pandey on 16/07/2020.
 //
 
 import XCTest
